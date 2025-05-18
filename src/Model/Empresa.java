@@ -4,89 +4,80 @@
  */
 package Model;
 
+import Controller.ListaDobleEmpleado;
+import Controller.ListaDobleProducto;
+import Controller.ColaTransaccion;
+
 /**
  *
  * @author User
  */
-import java.util.*;
 
 public class Empresa {
-    private List<Empleado> empleados;
-    private List<Producto> inventario;
-    private Stack<Transaccion> historial;
+    
+    private String nombre;
+    private ListaDobleEmpleado empleados;
+    private ListaDobleProducto productos;
+    private ColaTransaccion transacciones;
+    
+    public Empresa (String nombre)
+    {
+        this.nombre = nombre;
+        this.empleados = new ListaDobleEmpleado();
+        this.productos = new ListaDobleProducto();
+        this.transacciones = new ColaTransaccion();
+    }
+    
+    //Getters y setters
 
-    public Empresa() {
-        empleados = new ArrayList<>(); //Se están usando momentaneamente librerias de java para poder ejercutar las pruebas mas rapido
-        inventario = new ArrayList<>();//Empleados e inventario seran listas enlazadas dobles, e historial sera una pila 
-        historial = new Stack<>();
+    public String getNombre() {
+        return nombre;
     }
 
-    // Empleados
-    public void contratarEmpleado(Empleado emp) {
-        empleados.add(emp);
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public void despedirEmpleado(String nombre) {
-        empleados.removeIf(e -> e.getNombre().equalsIgnoreCase(nombre));
-    }
-
-    public List<Empleado> getEmpleados() {
+    public ListaDobleEmpleado getEmpleados() {
         return empleados;
     }
 
-    // Productos
-    public void agregarProducto(Producto p) {
-        inventario.add(p);
+    public ListaDobleProducto getProductos() {
+        return productos;
     }
 
-    public List<Producto> getInventario() {
-        return inventario;
+    public ColaTransaccion getTransacciones() {
+        return transacciones;
+    }
+    
+    // ==========================
+    // Funcionalidades
+    // ==========================
+    
+        public void registrarEmpleado(Empleado empleado) {
+        empleados.AgregarEmpleado(empleado);
     }
 
-    // Transacciones
-    public boolean registrarVenta(String nombreProducto, int cantidad) {
-        for (Producto p : inventario) {
-            if (p.getNombre().equalsIgnoreCase(nombreProducto) && p.reducirStock(cantidad)) {
-                Transaccion t = new Transaccion("Venta", p, cantidad);
-                historial.push(t);
-                return true;
-            }
-        }
-        return false;
+    public void registrarProducto(Producto producto) {
+        productos.AgregarProducto(producto);
     }
 
-    public boolean registrarCompra(String nombreProducto, int cantidad) {
-        for (Producto p : inventario) {
-            if (p.getNombre().equalsIgnoreCase(nombreProducto)) {
-                p.agregarStock(cantidad);
-                Transaccion t = new Transaccion("Compra", p, cantidad);
-                historial.push(t);
-                return true;
-            }
-        }
-        return false;
+    public void registrarTransaccion(Transaccion transaccion) {
+        transacciones.encolar(transaccion);
     }
 
-    public Transaccion deshacerUltimaTransaccion() {
-        if (!historial.isEmpty()) {
-            return historial.pop();
-        }
-        return null;
+    public void mostrarEmpleados() {
+        empleados.mostrar();
     }
 
-    public Stack<Transaccion> getHistorial() {
-        return historial;
+    public void mostrarProductos() {
+        productos.mostrar();
     }
 
-    public double calcularGanancias() {
-        double ventas = 0, compras = 0;
-        for (Transaccion t : historial) {
-            if (t.getTipo().equalsIgnoreCase("Venta")) {
-                ventas += t.getTotal();
-            } else {
-                compras += t.getTotal();
-            }
-        }
-        return ventas - compras;
+    public void mostrarTransacciones() {
+        transacciones.mostrarTransacciones();
     }
+    
+    
+    
 }

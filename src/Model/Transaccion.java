@@ -13,18 +13,21 @@ import java.util.Date;
 public class Transaccion {
     
     private String tipo; // Compra o Venta
+    private String IDtransaccion;
+    private Empleado empleado;
     private Producto producto;
     private int cantidad;
     private Date fecha;
     private double total;
 
-    public Transaccion(String tipo, Producto producto, int cantidad) 
-    {
+    public Transaccion(String tipo, String IDtransaccion, Empleado empleado, Producto producto, int cantidad, Date fecha, double total) {
         this.tipo = tipo;
+        this.IDtransaccion = IDtransaccion;
+        this.empleado = empleado;
         this.producto = producto;
         this.cantidad = cantidad;
-        this.fecha = new Date();
-        this.total = producto.getPrecio() * cantidad;
+        this.fecha = fecha;
+        this.total = producto.getPrecioventa()* cantidad;
     }
     
     //Encapsulamiento: Métodos públicos para acceder/controlar atributos
@@ -35,6 +38,22 @@ public class Transaccion {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getIDtransaccion() {
+        return IDtransaccion;
+    }
+
+    public void setIDtransaccion(String IDtransaccion) {
+        this.IDtransaccion = IDtransaccion;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     public Producto getProducto() {
@@ -68,11 +87,22 @@ public class Transaccion {
     public void setTotal(double total) {
         this.total = total;
     }
+    
+    
 
 
+
+//Abstracción: toString() muestra la información útil del objeto
     @Override
     public String toString() {
-        return tipo + ": " + producto.getNombre() + " x" + cantidad + " | $" + total + " | " + fecha;
+        return "Transaccion{" +
+                "ID='" + IDtransaccion + '\'' +
+                ", Empleado='" + empleado + '\'' +
+                ", Producto='" + producto + '\'' +
+                ", Cantidad='" + cantidad + '\'' +
+                ", fecha='" + fecha + '\'' +
+                ", Total=" + total +
+                '}';
     }
 }
 

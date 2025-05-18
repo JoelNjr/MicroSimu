@@ -7,14 +7,16 @@ public class Empleado {
     
     //Encapsulamiento: Atributos privados solo accesibles por getters/setters
     private String nombre;
+    private String ID;
     private String cargo;
     private double salario;
     
     
     // Abstracción: Constructor simplifica la creación del objeto
-    public Empleado(String nombre, String cargo, double salario) 
+    public Empleado(String nombre, String ID, String cargo, double salario) 
     {
         this.nombre = nombre;
+        this.ID = ID;
         this.cargo = cargo;
         this.salario = salario;
     }
@@ -29,6 +31,14 @@ public class Empleado {
         this.nombre = nombre;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+    
     public String getCargo() {
         return cargo;
     }
@@ -48,6 +58,11 @@ public class Empleado {
     //Abstracción: toString() muestra la información útil del objeto
     @Override
     public String toString() {
-        return nombre + " - " + cargo + " - $" + salario;
+        return "Empleado{" +
+                "ID='" + ID + '\'' +
+                ", Nombre='" + nombre + '\'' +
+                ", Cargo='" + cargo + '\'' +
+                ", Salario=" + salario +
+                '}';
     }
 }
