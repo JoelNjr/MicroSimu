@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import java.io.Serializable;
 import Model.Empleado;
 import Model.NodoEmpleado;
 
@@ -11,7 +12,7 @@ import Model.NodoEmpleado;
  *
  * @author User
  */
-public class ListaDobleEmpleado {
+public class ListaDobleEmpleado implements Serializable {
     
     private NodoEmpleado cabeza; // apuntador a la cabeza de la lista
     private NodoEmpleado cola; // apuntador al final de la cola 

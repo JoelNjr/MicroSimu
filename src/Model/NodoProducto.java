@@ -4,11 +4,12 @@
  */
 package Model;
 
+import java.io.Serializable;
 /**
  *
  * @author User
  */
-public class NodoProducto {
+public class NodoProducto implements Serializable {
     
     private Producto producto;
     private NodoProducto anterior;

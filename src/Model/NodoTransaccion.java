@@ -4,11 +4,13 @@
  */
 package Model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author User
  */
-public class NodoTransaccion {
+public class NodoTransaccion implements Serializable {
     
     private Transaccion transaccion;
     private NodoTransaccion siguiente;

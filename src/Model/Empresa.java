@@ -4,6 +4,7 @@
  */
 package Model;
 
+import java.io.Serializable;
 import Controller.ListaDobleEmpleado;
 import Controller.ListaDobleProducto;
 import Controller.ColaTransaccion;
@@ -13,7 +14,7 @@ import Controller.ColaTransaccion;
  * @author User
  */
 
-public class Empresa {
+public class Empresa implements Serializable {
     
     private String nombre;
     private ListaDobleEmpleado empleados;

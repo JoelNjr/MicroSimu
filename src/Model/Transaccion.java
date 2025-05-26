@@ -4,13 +4,14 @@
  */
 package Model;
 import java.util.Date;
+import java.io.Serializable;
 /**
  *
  * @author User
  */
 
 
-public class Transaccion {
+public class Transaccion implements Serializable {
     
     private String tipo; // Compra o Venta
     private String IDtransaccion;

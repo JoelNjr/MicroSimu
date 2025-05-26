@@ -3,7 +3,9 @@
 //@joel.vasquez
 package Model;
 
-public class Empleado {
+import java.io.Serializable;
+
+public class Empleado implements Serializable {
     
     //Encapsulamiento: Atributos privados solo accesibles por getters/setters
     private String nombre;

@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import java.io.Serializable;
 import Model.NodoTransaccion;
 import Model.Transaccion;
 
@@ -11,7 +12,7 @@ import Model.Transaccion;
  *
  * @author User
  */
-public class ColaTransaccion {
+public class ColaTransaccion implements Serializable {
     
     private NodoTransaccion primero;
     private NodoTransaccion ultimo;
