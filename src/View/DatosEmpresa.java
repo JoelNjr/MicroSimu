@@ -22,20 +22,28 @@ import Controller.PersistenciaDatos;
  */
 public class DatosEmpresa {
     public static String nombreEmpresa;
+    public static ListaDobleEmpleado listaEmpleados = new ListaDobleEmpleado();
+    public static ListaDobleProducto listaProductos = new ListaDobleProducto();
+    public static ColaTransaccion colaTransacciones = new ColaTransaccion();
 
 
     public static void setNombreEmpresa(String nombreEmpresa) {
         DatosEmpresa.nombreEmpresa = nombreEmpresa;
+        
+    listaEmpleados.cargarDesdeArchivo();      
+    listaProductos.cargarDesdeArchivo();      
+    colaTransacciones.cargarDesdeArchivo(); 
     }
     
-    public static ListaDobleEmpleado listaEmpleados = ListaDobleEmpleado.cargarDesdeArchivo();
+    
 
     public static void guardarDatos() {
         listaEmpleados.guardarEnArchivo();
+        listaProductos.guardarEnArchivo();
+        colaTransacciones.guardarEnArchivo();
     }
     
-    public static ListaDobleProducto listaProductos = new ListaDobleProducto();
-    public static ColaTransaccion colaTransacciones = new ColaTransaccion();
+    
 
      public static String getNombreEmpresa() {
         return nombreEmpresa;

@@ -46,7 +46,7 @@ public class Empleados extends javax.swing.JFrame {
     DefaultTableModel modelo = (DefaultTableModel) tblEmpleado.getModel();
     modelo.setRowCount(0); // Limpiar la tabla
 
-    NodoEmpleado actual = listaEmpleados.getCabeza();
+    NodoEmpleado actual = DatosEmpresa.listaEmpleados.getCabeza();
 
     while (actual != null) {
         Empleado emp = actual.getEmpleado(); // Sacamos el empleado del nodo
@@ -349,14 +349,19 @@ public class Empleados extends javax.swing.JFrame {
         Empleado emp = listaEmpleados.buscar(buscarID);
 
         if (emp != null) {
-            txtNombre.setText(emp.getNombre());
-            txtID.setText(emp.getID());
-            txtCargo.setText(emp.getCargo());
-            txtSalario.setText(String.valueOf(emp.getSalario()));
-            JOptionPane.showMessageDialog(null, "Empleado encontrado.");
-        } else {
-            JOptionPane.showMessageDialog(null, "Empleado no encontrado.");
+        DefaultTableModel modelo = (DefaultTableModel) tblEmpleado.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            String nombreTabla = modelo.getValueAt(i, 1).toString(); // el ID está en la columna 1 
+            if (nombreTabla.equalsIgnoreCase(buscarID)) {
+                tblEmpleado.setRowSelectionInterval(i, i); // Selecciona esa fila
+                tblEmpleado.scrollRectToVisible(tblEmpleado.getCellRect(i, 0, true)); // Hace scroll si está fuera de vista
+                JOptionPane.showMessageDialog(this, "Empleado encontrado y seleccionado.");
+                return;
+            }
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Empleado no encontrado.");
+    }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -393,7 +398,7 @@ public class Empleados extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-          String id = txtID.getText().trim();
+        String id = txtID.getText().trim();
 
         NodoEmpleado actual = obtenerNodoPorID(id);
 

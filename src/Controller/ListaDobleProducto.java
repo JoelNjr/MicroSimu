@@ -5,8 +5,19 @@
 package Controller;
 
 import java.io.Serializable;
-import Model.NodoProducto;
+import java.io.*;
+import Model.Empresa;
+import Model.Empleado;
 import Model.Producto;
+import Model.Transaccion;
+import Model.NodoEmpleado;
+import Model.NodoProducto;
+import Model.NodoTransaccion;
+import Controller.ListaDobleProducto;
+import Controller.ListaDobleEmpleado;
+import Controller.ColaTransaccion;
+import Controller.PersistenciaDatos;
+import View.DatosEmpresa;
 
 /**
  *
@@ -71,13 +82,28 @@ public class ListaDobleProducto implements Serializable {
     }
         
         
-         // Buscar producto por nombre
-    public Producto buscar(String nombre) 
+         // Buscar producto por CODIGO
+    public Producto buscar(String CODIGO) 
     {
         NodoProducto temp = cabeza;
         while (temp != null) 
         {
-            if (temp.getProducto().getNombre().equalsIgnoreCase(nombre)) 
+            if (temp.getProducto().getCodigo().equalsIgnoreCase(CODIGO)) 
+            {
+                return temp.getProducto();
+            }
+            temp = temp.getSiguiente();
+        }
+        return null;
+    }
+    
+         // Buscar producto por NOMBRE
+    public Producto buscarpornombre (String NOMBRE) 
+    {
+        NodoProducto temp = cabeza;
+        while (temp != null) 
+        {
+            if (temp.getProducto().getNombre().equalsIgnoreCase(NOMBRE)) 
             {
                 return temp.getProducto();
             }
@@ -114,4 +140,69 @@ public class ListaDobleProducto implements Serializable {
         return cabeza == null;
     }
     
+     public NodoProducto getCabeza() 
+    {
+       return cabeza;
+    }
+     
+    public Producto getProductoPorIndice(int indice) {
+    NodoProducto actual = cabeza;
+    int contador = 0;
+    while (actual != null) {
+        if (contador == indice) {
+            return actual.getProducto();
+        }
+        actual = actual.getSiguiente();
+        contador++;
+    }
+    return null;
+    }
+    
+    public void reemplazarEnIndice(int indice, Producto nuevoProducto) {
+    NodoProducto actual = cabeza;
+    int contador = 0;
+    while (actual != null) {
+        if (contador == indice) {
+            actual.setProducto(nuevoProducto);
+            return;
+        }
+        actual = actual.getSiguiente();
+        contador++;
+    }
+}
+
+
+    
+    // Guardar en archivo
+    public void guardarEnArchivo() {
+    try {
+        String nombreEmpresa = DatosEmpresa.getNombreEmpresa();
+        FileOutputStream archivo = new FileOutputStream("productos_" + nombreEmpresa + ".dat");
+        ObjectOutputStream out = new ObjectOutputStream(archivo);
+        out.writeObject(this); // guarda la lista completa
+        out.close();
+        archivo.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    
+    
+    
+    // Cargar desde archivo
+    public static ListaDobleProducto cargarDesdeArchivo() 
+    {
+    try {
+        String nombreEmpresa = DatosEmpresa.getNombreEmpresa();
+        FileInputStream archivo = new FileInputStream("productos_" + nombreEmpresa + ".dat");
+        ObjectInputStream in = new ObjectInputStream(archivo);
+        ListaDobleProducto lista = (ListaDobleProducto) in.readObject();
+        in.close();
+        archivo.close();
+        return lista;
+    } catch (IOException | ClassNotFoundException e) {
+        return new ListaDobleProducto(); // si no existe el archivo, crea una lista vacía
+    }
+    }
+
 }

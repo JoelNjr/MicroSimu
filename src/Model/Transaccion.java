@@ -3,8 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
-import java.util.Date;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 /**
  *
  * @author User
@@ -13,81 +15,41 @@ import java.io.Serializable;
 
 public class Transaccion implements Serializable {
     
-    private String tipo; // Compra o Venta
-    private String IDtransaccion;
-    private Empleado empleado;
-    private Producto producto;
+    private String id;
+    private String tipo;
+    private String producto;
     private int cantidad;
-    private Date fecha;
+    private String empleado;
+    private String fecha;
     private double total;
 
-    public Transaccion(String tipo, String IDtransaccion, Empleado empleado, Producto producto, int cantidad, Date fecha, double total) {
+    public Transaccion(String tipo, String producto, int cantidad, String empleado, double total) {
+        this.id = generarID(); // ID único automático
+        this.fecha = obtenerFechaActual(); // Fecha actual automática
         this.tipo = tipo;
-        this.IDtransaccion = IDtransaccion;
-        this.empleado = empleado;
         this.producto = producto;
         this.cantidad = cantidad;
-        this.fecha = fecha;
-        this.total = producto.getPrecioventa()* cantidad;
-    }
-    
-    //Encapsulamiento: Métodos públicos para acceder/controlar atributos
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getIDtransaccion() {
-        return IDtransaccion;
-    }
-
-    public void setIDtransaccion(String IDtransaccion) {
-        this.IDtransaccion = IDtransaccion;
-    }
-
-    public Empleado getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
-    }
-
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
         this.total = total;
     }
+
+    private String generarID() {
+        return UUID.randomUUID().toString().substring(0, 8); // ID corto único
+    }
+
+    private String obtenerFechaActual() {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formato.format(new Date());
+    }
+
+    // Getters y setters
+    public String getId() { return id; }
+    public String getTipo() { return tipo; }
+    public String getProducto() { return producto; }
+    public int getCantidad() { return cantidad; }
+    public String getEmpleado() { return empleado; }
+    public String getFecha() { return fecha; }
+    public double getTotal() { return total; }
     
     
 
@@ -97,7 +59,7 @@ public class Transaccion implements Serializable {
     @Override
     public String toString() {
         return "Transaccion{" +
-                "ID='" + IDtransaccion + '\'' +
+                "ID='" + id + '\'' +
                 ", Empleado='" + empleado + '\'' +
                 ", Producto='" + producto + '\'' +
                 ", Cantidad='" + cantidad + '\'' +

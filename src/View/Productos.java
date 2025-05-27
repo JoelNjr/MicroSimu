@@ -16,12 +16,16 @@ import Controller.ListaDobleEmpleado;
 import Controller.ColaTransaccion;
 import Controller.PersistenciaDatos;
 import static View.DatosEmpresa.listaEmpleados;
+import static View.DatosEmpresa.listaProductos;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Lenovo
  */
 public class Productos extends javax.swing.JFrame {
     
+    private Productos gestionarProductos; // Guarda referencia
     private Empresa empresa;
 
     /**
@@ -29,8 +33,44 @@ public class Productos extends javax.swing.JFrame {
      */
     public Productos(Empresa empresa) {
         initComponents();
+        actualizarTabla();
         this.setLocationRelativeTo(null);
         this.empresa = empresa;
+    }
+    
+    public void actualizarTabla() {
+    DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+    modelo.setRowCount(0); // Limpiar la tabla
+
+    NodoProducto actual = DatosEmpresa.listaProductos.getCabeza();
+
+    while (actual != null) 
+    {
+        Producto pro = actual.getProducto(); // Sacamos el producto del nodo
+
+        modelo.addRow(new Object[] {
+            pro.getCodigo(),
+            pro.getNombre(),
+            pro.getStock(),
+            pro.getPreciocompra(),
+            pro.getPrecioventa()
+        });
+
+        actual = actual.getSiguiente(); // Avanzamos al siguiente nodo
+    }
+    }
+    
+     private NodoProducto obtenerNodoPorCodigo(String codigo) 
+    {
+    NodoProducto actual = listaProductos.getCabeza();
+
+    while (actual != null) {
+        if (actual.getProducto().getCodigo().equals(codigo)) {
+            return actual;
+        }
+        actual = actual.getSiguiente();
+    }
+    return null;
     }
 
     /**
@@ -46,12 +86,14 @@ public class Productos extends javax.swing.JFrame {
         ventanaPrincipal = new javax.swing.JPanel();
         btnAgregrarProducto = new javax.swing.JButton();
         btnEliminarProducto = new javax.swing.JButton();
-        txtBuscarProducto = new javax.swing.JTextField();
-        btnBuscar = new javax.swing.JButton();
+        btnEditarProducto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblProductos = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
+        btnBuscar1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
@@ -60,6 +102,7 @@ public class Productos extends javax.swing.JFrame {
         ventanaPrincipal.setBackground(new java.awt.Color(255, 255, 143));
         ventanaPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnAgregrarProducto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAgregrarProducto.setText("Agregar Producto");
         btnAgregrarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,6 +111,7 @@ public class Productos extends javax.swing.JFrame {
         });
         ventanaPrincipal.add(btnAgregrarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
+        btnEliminarProducto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnEliminarProducto.setText("Eliminar Producto");
         btnEliminarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,29 +119,34 @@ public class Productos extends javax.swing.JFrame {
             }
         });
         ventanaPrincipal.add(btnEliminarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, -1, -1));
-        ventanaPrincipal.add(txtBuscarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, 110, -1));
 
-        btnBuscar.setText("Buscar");
-        ventanaPrincipal.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, -1, -1));
+        btnEditarProducto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEditarProducto.setText("Editar Producto");
+        btnEditarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarProductoActionPerformed(evt);
+            }
+        });
+        ventanaPrincipal.add(btnEditarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 70, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Empleado", "ID", "Codigo", "Stock", "Precio Compra", "Precio Venta"
+                "Codigo", "Nombre", "Stock", "Precio Compra", "Precio Venta"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblProductos);
 
         ventanaPrincipal.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 690, -1));
 
         jLabel6.setFont(new java.awt.Font("Roboto Black", 2, 36)); // NOI18N
         jLabel6.setText("Productos");
-        ventanaPrincipal.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, -1, -1));
+        ventanaPrincipal.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
 
         btnVolver.setBackground(new java.awt.Color(255, 255, 115));
         btnVolver.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -110,11 +159,28 @@ public class Productos extends javax.swing.JFrame {
         });
         ventanaPrincipal.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 540, -1, -1));
 
+        btnBuscar1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar1.setText("Buscar Producto");
+        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscar1ActionPerformed(evt);
+            }
+        });
+        ventanaPrincipal.add(btnBuscar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 70, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagenes/pngtree-products-line-icon-png-image_9065446.png"))); // NOI18N
+        jLabel1.setText("jLabel1");
+        ventanaPrincipal.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 50, -1));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagenes/pngtree-products-line-icon-png-image_9065446.png"))); // NOI18N
+        jLabel2.setText("jLabel1");
+        ventanaPrincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 50, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ventanaPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+            .addComponent(ventanaPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,13 +192,32 @@ public class Productos extends javax.swing.JFrame {
 
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
         // TODO add your handling code here:
+         int fila = tblProductos.getSelectedRow(); // Obtenemos la fila seleccionada
+
+        if (fila >= 0) {
+            // Obtenemos el CODIGO (columna 0 en la tabla, ya que empieza en 0)
+            String CODIGO = (String) tblProductos.getValueAt(fila, 0);
+
+            boolean eliminado = listaProductos.EliminarProducto(CODIGO); 
+            DatosEmpresa.guardarDatos();
+
+
+            if (eliminado) {
+                actualizarTabla(); // Refrescamos la tabla
+                JOptionPane.showMessageDialog(null, "Producto eliminado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el producto con ese codigo.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecciona una fila para eliminar.");
+        }
+    
     }//GEN-LAST:event_btnEliminarProductoActionPerformed
 
     private void btnAgregrarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregrarProductoActionPerformed
         // TODO add your handling code here:
-        AgregarProducto agregarproducto = new AgregarProducto(empresa);
-        agregarproducto.setVisible(true);
-        dispose();
+        AgregarProducto ventanaAgregar = new AgregarProducto(empresa,this);
+        ventanaAgregar.setVisible(true);
     }//GEN-LAST:event_btnAgregrarProductoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -141,6 +226,39 @@ public class Productos extends javax.swing.JFrame {
         dashboard.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
+        // TODO add your handling code here:
+        String buscarCODIGO = JOptionPane.showInputDialog("Ingresa el CODIGO del producto a buscar:");
+        Producto pro = listaProductos.buscar(buscarCODIGO);
+
+        if (pro != null) {
+        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            String codigoTabla = modelo.getValueAt(i, 0).toString(); // Asume que el código está en columna 0
+            if (codigoTabla.equalsIgnoreCase(buscarCODIGO)) {
+                tblProductos.setRowSelectionInterval(i, i);
+                tblProductos.scrollRectToVisible(tblProductos.getCellRect(i, 0, true));
+                JOptionPane.showMessageDialog(this, "Producto encontrado y seleccionado.");
+                return;
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Producto no encontrado.");
+    }
+    }//GEN-LAST:event_btnBuscar1ActionPerformed
+
+    private void btnEditarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarProductoActionPerformed
+        int fila = tblProductos.getSelectedRow();
+
+    if (fila != -1) {
+        AgregarProducto.indiceEdicion = fila;
+        new AgregarProducto(empresa,gestionarProductos).setVisible(true);
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecciona un producto para editar.");
+    }
+    }//GEN-LAST:event_btnEditarProductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,14 +299,16 @@ public class Productos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregrarProducto;
-    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscar1;
+    private javax.swing.JButton btnEditarProducto;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtBuscarProducto;
+    private javax.swing.JTable tblProductos;
     private javax.swing.JPanel ventanaPrincipal;
     // End of variables declaration//GEN-END:variables
 }

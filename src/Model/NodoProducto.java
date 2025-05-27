@@ -31,6 +31,10 @@ public class NodoProducto implements Serializable {
         return producto;
     }
 
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     public NodoProducto getAnterior() {
         return anterior;
     }

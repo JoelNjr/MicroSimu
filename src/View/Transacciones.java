@@ -16,12 +16,14 @@ import Controller.ListaDobleEmpleado;
 import Controller.ColaTransaccion;
 import Controller.PersistenciaDatos;
 import static View.DatosEmpresa.listaEmpleados;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author User
  */
 public class Transacciones extends javax.swing.JFrame {
     
+    private Transacciones gestionartransacciones;
     private Empresa empresa;
 
     /**
@@ -29,9 +31,31 @@ public class Transacciones extends javax.swing.JFrame {
      */
     public Transacciones(Empresa empresa) {
         initComponents();
+        actualizarTabla();
         this.setLocationRelativeTo(null);
         this.empresa = empresa;
     }
+    
+    private void actualizarTabla() {
+    DefaultTableModel modelo = (DefaultTableModel) tablaTransacciones.getModel();
+    modelo.setRowCount(0); // Limpiar
+
+    NodoTransaccion aux = DatosEmpresa.colaTransacciones.getPrimero();
+    while (aux != null) {
+        Transaccion t = aux.getTransaccion();
+        modelo.addRow(new Object[] {
+            t.getId(),
+            t.getTipo(),
+            t.getProducto(),
+            t.getCantidad(),
+            t.getFecha(),
+            t.getEmpleado(),
+            t.getTotal()
+        });
+        aux = aux.getSiguiente();
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,6 +74,8 @@ public class Transacciones extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaTransacciones = new javax.swing.JTable();
         btnVolver = new javax.swing.JButton();
+        btnRegistrarVenta = new javax.swing.JButton();
+        btnVerReportesAutomaticos = new javax.swing.JButton();
 
         jLabel3.setText("jLabel3");
 
@@ -89,20 +115,36 @@ public class Transacciones extends javax.swing.JFrame {
             }
         });
 
+        btnRegistrarVenta.setBackground(new java.awt.Color(255, 255, 115));
+        btnRegistrarVenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegistrarVenta.setText("Registrar Transaccion");
+        btnRegistrarVenta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnRegistrarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarVentaActionPerformed(evt);
+            }
+        });
+
+        btnVerReportesAutomaticos.setBackground(new java.awt.Color(255, 255, 115));
+        btnVerReportesAutomaticos.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnVerReportesAutomaticos.setText("Ver Reportes Automaticos");
+        btnVerReportesAutomaticos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnVerReportesAutomaticos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerReportesAutomaticosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(81, 81, 81)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -110,6 +152,15 @@ public class Transacciones extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnVolver)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnRegistrarVenta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnVerReportesAutomaticos)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,9 +173,16 @@ public class Transacciones extends javax.swing.JFrame {
                             .addComponent(jLabel4)))
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnVolver)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(btnVolver))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRegistrarVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnVerReportesAutomaticos, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -148,6 +206,16 @@ public class Transacciones extends javax.swing.JFrame {
         dashboard.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnVerReportesAutomaticosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerReportesAutomaticosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVerReportesAutomaticosActionPerformed
+
+    private void btnRegistrarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarVentaActionPerformed
+        // TODO add your handling code here:
+        RegistrarTransaccion registrartransaccion = new RegistrarTransaccion(empresa,this);
+        registrartransaccion.setVisible(true);
+    }//GEN-LAST:event_btnRegistrarVentaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,6 +255,8 @@ public class Transacciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrarVenta;
+    private javax.swing.JButton btnVerReportesAutomaticos;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

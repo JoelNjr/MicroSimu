@@ -5,8 +5,19 @@
 package Controller;
 
 import java.io.Serializable;
-import Model.NodoTransaccion;
+import java.io.*;
+import Model.Empresa;
+import Model.Empleado;
+import Model.Producto;
 import Model.Transaccion;
+import Model.NodoEmpleado;
+import Model.NodoProducto;
+import Model.NodoTransaccion;
+import Controller.ListaDobleProducto;
+import Controller.ListaDobleEmpleado;
+import Controller.ColaTransaccion;
+import Controller.PersistenciaDatos;
+import View.DatosEmpresa;
 
 /**
  *
@@ -66,5 +77,42 @@ public class ColaTransaccion implements Serializable {
             actual = actual.getSiguiente();
         }
         return contador;
+    }
+    
+    public NodoTransaccion getPrimero() 
+    {
+       return primero;
+    }
+    
+    // Guardar en archivo
+    public void guardarEnArchivo() {
+    try {
+        String nombreEmpresa = DatosEmpresa.getNombreEmpresa();
+        FileOutputStream archivo = new FileOutputStream("transacciones_" + nombreEmpresa + ".dat");
+        ObjectOutputStream out = new ObjectOutputStream(archivo);
+        out.writeObject(this); // guarda la lista completa
+        out.close();
+        archivo.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    
+    
+    
+    // Cargar desde archivo
+    public static ColaTransaccion cargarDesdeArchivo() 
+    {
+    try {
+        String nombreEmpresa = DatosEmpresa.getNombreEmpresa();
+        FileInputStream archivo = new FileInputStream("transacciones_" + nombreEmpresa + ".dat");
+        ObjectInputStream in = new ObjectInputStream(archivo);
+        ColaTransaccion cola = (ColaTransaccion) in.readObject();
+        in.close();
+        archivo.close();
+        return cola;
+    } catch (IOException | ClassNotFoundException e) {
+        return new ColaTransaccion(); // si no existe el archivo, crea una lista vacía
+    }
     }
 }

@@ -94,6 +94,21 @@ public class ListaDobleEmpleado implements Serializable {
         }
         return null;
     }
+    
+             // Buscar producto por NOMBRE
+    public Empleado buscarpornombre (String NOMBRE) 
+    {
+        NodoEmpleado temp = cabeza;
+        while (temp != null) 
+        {
+            if (temp.getEmpleado().getNombre().equalsIgnoreCase(NOMBRE)) 
+            {
+                return temp.getEmpleado();
+            }
+            temp = temp.getSiguiente();
+        }
+        return null;
+    }
 
     // Mostrar productos
     public void mostrar() {
