@@ -14,6 +14,7 @@ import Model.NodoTransaccion;
 import Controller.ListaDobleProducto;
 import Controller.ListaDobleEmpleado;
 import Controller.ColaTransaccion;
+import static View.DatosEmpresa.listaEmpleados;
 import Controller.PersistenciaDatos;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -153,6 +154,7 @@ public class Inicio extends javax.swing.JFrame {
         String nombre = txtNombreEmpresa.getText().trim();
         if (!nombre.isEmpty()) {
             DatosEmpresa.nombreEmpresa = nombre;
+            DatosEmpresa.setNombreEmpresa(txtNombreEmpresa.getText());
 
             Dashboard dashboard = new Dashboard(empresa);
             dashboard.setVisible(true);

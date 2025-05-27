@@ -5,8 +5,19 @@
 package Controller;
 
 import java.io.Serializable;
+import java.io.*;
+import Model.Empresa;
 import Model.Empleado;
+import Model.Producto;
+import Model.Transaccion;
 import Model.NodoEmpleado;
+import Model.NodoProducto;
+import Model.NodoTransaccion;
+import Controller.ListaDobleProducto;
+import Controller.ListaDobleEmpleado;
+import Controller.ColaTransaccion;
+import Controller.PersistenciaDatos;
+import View.DatosEmpresa;
 
 /**
  *
@@ -69,13 +80,13 @@ public class ListaDobleEmpleado implements Serializable {
         return false;
     }
         
-        // Buscar producto por nombre
-    public Empleado buscar(String nombre) 
+        // Buscar empleado por id
+    public Empleado buscar(String id) 
     {
         NodoEmpleado temp = cabeza;
         while (temp != null) 
         {
-            if (temp.getEmpleado().getNombre().equalsIgnoreCase(nombre)) 
+            if (temp.getEmpleado().getID().equalsIgnoreCase(id)) 
             {
                 return temp.getEmpleado();
             }
@@ -94,6 +105,42 @@ public class ListaDobleEmpleado implements Serializable {
         }
     }
     
-
+    public NodoEmpleado getCabeza() 
+    {
+       return cabeza;
+    }
     
+    // Guardar en archivo
+    public void guardarEnArchivo() {
+    try {
+        String nombreEmpresa = DatosEmpresa.getNombreEmpresa();
+        FileOutputStream archivo = new FileOutputStream("empleados_" + nombreEmpresa + ".dat");
+        ObjectOutputStream out = new ObjectOutputStream(archivo);
+        out.writeObject(this); // guarda la lista completa
+        out.close();
+        archivo.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    
+    
+    
+    // Cargar desde archivo
+    public static ListaDobleEmpleado cargarDesdeArchivo() 
+    {
+    try {
+        String nombreEmpresa = DatosEmpresa.getNombreEmpresa();
+        FileInputStream archivo = new FileInputStream("empleados_" + nombreEmpresa + ".dat");
+        ObjectInputStream in = new ObjectInputStream(archivo);
+        ListaDobleEmpleado lista = (ListaDobleEmpleado) in.readObject();
+        in.close();
+        archivo.close();
+        return lista;
+    } catch (IOException | ClassNotFoundException e) {
+        return new ListaDobleEmpleado(); // si no existe el archivo, crea una lista vacía
+    }
+    }
+
+  
 }

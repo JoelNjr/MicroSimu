@@ -15,6 +15,7 @@ import Controller.ListaDobleProducto;
 import Controller.ListaDobleEmpleado;
 import Controller.ColaTransaccion;
 import Controller.PersistenciaDatos;
+import static View.DatosEmpresa.listaEmpleados;
 import java.awt.BorderLayout;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -102,6 +103,11 @@ public class Dashboard extends javax.swing.JFrame {
         btnEmpleados.setText("Gestionar Empleados");
         btnEmpleados.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEmpleados.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmpleadosActionPerformed(evt);
+            }
+        });
 
         btnPrincipal.setBackground(new java.awt.Color(255, 255, 115));
         btnPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -268,11 +274,24 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
         // TODO add your handling code here:
+        Productos productos = new Productos(empresa);
+        productos.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void btnTransaccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransaccionesActionPerformed
         // TODO add your handling code here:
+        Transacciones transacciones = new Transacciones(empresa);
+        transacciones.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnTransaccionesActionPerformed
+
+    private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
+        // TODO add your handling code here:
+        Empleados empleados = new Empleados(empresa);
+        empleados.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnEmpleadosActionPerformed
 
     /**
      * @param args the command line arguments
