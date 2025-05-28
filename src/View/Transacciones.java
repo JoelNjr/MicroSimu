@@ -16,7 +16,11 @@ import Controller.ListaDobleEmpleado;
 import Controller.ColaTransaccion;
 import Controller.PersistenciaDatos;
 import static View.DatosEmpresa.listaEmpleados;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import Util.ReportesUtil;
 /**
  *
  * @author User
@@ -55,6 +59,82 @@ public class Transacciones extends javax.swing.JFrame {
         aux = aux.getSiguiente();
     }
 }
+    
+    public static String generarReportes() {
+        StringBuilder reporte = new StringBuilder();
+
+        if (DatosEmpresa.colaTransacciones == null || DatosEmpresa.colaTransacciones.estaVacia()) {
+            return "No hay transacciones registradas.";
+        }
+
+        // HashMaps para conteo
+        HashMap<String, Integer> compras = new HashMap<>();
+        HashMap<String, Integer> ventas = new HashMap<>();
+        HashMap<String, Integer> porProducto = new HashMap<>();
+        HashMap<String, Integer> porEmpleado = new HashMap<>();
+
+        // Recorrer las transacciones
+        NodoTransaccion actual = DatosEmpresa.colaTransacciones.getPrimero();
+        while (actual != null) 
+        {
+            
+            Transaccion t = actual.getTransaccion();
+
+            // Clasificar por tipo
+            if (t.getTipo().equalsIgnoreCase("Compra")) {
+                compras.put(t.getProducto(), compras.getOrDefault(t.getProducto(), 0) + t.getCantidad());
+            } else if (t.getTipo().equalsIgnoreCase("Venta")) {
+                ventas.put(t.getProducto(), ventas.getOrDefault(t.getProducto(), 0) + t.getCantidad());
+            }
+
+            // Contar todas las transacciones por producto (sin importar tipo)
+            porProducto.put(t.getProducto(), porProducto.getOrDefault(t.getProducto(), 0) + 1);
+
+            // Contar por empleado
+            porEmpleado.put(t.getEmpleado(), porEmpleado.getOrDefault(t.getEmpleado(), 0) + 1);
+
+            actual = actual.getSiguiente();
+            
+        }
+        
+
+        // 📌 Producto con más ventas
+        String prodMasVendido = maximo(ventas);
+        reporte.append("🛒 Producto más vendido: ").append(prodMasVendido).append(" (").append(ventas.get(prodMasVendido)).append(" unidades)\n");
+
+        // 📦 Producto con más compras
+        String prodMasComprado = maximo(compras);
+        reporte.append("📦 Producto más comprado: ").append(prodMasComprado).append(" (").append(compras.get(prodMasComprado)).append(" unidades)\n");
+
+        // 🔁 Productos con más de 5 transacciones
+        reporte.append("📈 Productos con más de 5 transacciones:\n");
+        for (Map.Entry<String, Integer> entry : porProducto.entrySet()) {
+            if (entry.getValue() > 5) {
+                reporte.append("- ").append(entry.getKey()).append(" (").append(entry.getValue()).append(" transacciones)\n");
+            }
+        }
+
+        // 💼 Empleado con más transacciones
+        String empleadoTop = maximo(porEmpleado);
+        reporte.append("🏅 Empleado con más transacciones: ").append(empleadoTop).append(" (").append(porEmpleado.get(empleadoTop)).append(" transacciones)\n");
+
+        return reporte.toString();
+    }
+
+    // Método auxiliar para obtener el nombre con mayor cantidad
+    private static String maximo(HashMap<String, Integer> mapa) {
+        String maxClave = null;
+        int maxValor = -1;
+
+        for (Map.Entry<String, Integer> entry : mapa.entrySet()) {
+            if (entry.getValue() > maxValor) {
+                maxValor = entry.getValue();
+                maxClave = entry.getKey();
+            }
+        }
+
+        return maxClave != null ? maxClave : "Ninguno";
+    }
 
 
     /**
@@ -209,12 +289,17 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void btnVerReportesAutomaticosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerReportesAutomaticosActionPerformed
         // TODO add your handling code here:
+    ReportesTransacciones ventana = new ReportesTransacciones(empresa,DatosEmpresa.listaProductos,DatosEmpresa.colaTransacciones);
+    ventana.setVisible(true);
+    ventana.setLocationRelativeTo(null); // Centrado
     }//GEN-LAST:event_btnVerReportesAutomaticosActionPerformed
 
     private void btnRegistrarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarVentaActionPerformed
         // TODO add your handling code here:
+        
         RegistrarTransaccion registrartransaccion = new RegistrarTransaccion(empresa,this);
         registrartransaccion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRegistrarVentaActionPerformed
 
     /**

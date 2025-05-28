@@ -341,6 +341,10 @@ public class Empleados extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Empleado agregado correctamente.");
 
         actualizarTabla(); // este método tú lo haces para refrescar la tabla visual
+        txtNombre.setText("");
+        txtCargo.setText("");
+        txtID.setText("");
+        txtSalario.setText("");
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed

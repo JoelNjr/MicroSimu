@@ -48,5 +48,31 @@ public class DatosEmpresa {
      public static String getNombreEmpresa() {
         return nombreEmpresa;
     }
+
+    public static ListaDobleEmpleado getListaEmpleados() {
+        return listaEmpleados;
+    }
+
+    public static void setListaEmpleados(ListaDobleEmpleado listaEmpleados) {
+        DatosEmpresa.listaEmpleados = listaEmpleados;
+    }
+
+    public static ListaDobleProducto getListaProductos() {
+        return listaProductos;
+    }
+
+    public static void setListaProductos(ListaDobleProducto listaProductos) {
+        DatosEmpresa.listaProductos = listaProductos;
+    }
+
+    public static ColaTransaccion getColaTransacciones() {
+        return colaTransacciones;
+    }
+
+    public static void setColaTransacciones(ColaTransaccion colaTransacciones) {
+        DatosEmpresa.colaTransacciones = colaTransacciones;
+    }
+     
+     
     
 }

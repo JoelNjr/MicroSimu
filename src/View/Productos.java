@@ -218,6 +218,7 @@ public class Productos extends javax.swing.JFrame {
         // TODO add your handling code here:
         AgregarProducto ventanaAgregar = new AgregarProducto(empresa,this);
         ventanaAgregar.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAgregrarProductoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
